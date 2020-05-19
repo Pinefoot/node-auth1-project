@@ -6,7 +6,7 @@ const session = require('express-session');
 const usersRouter = require('../users/users-router')
 const authRouter = require('../auth/auth-router')
 
-const server = expresss()
+const server = express()
 
 const sessionConfig = {
     cookie: {
@@ -26,8 +26,12 @@ server.use(helmet());
 server.use(express.json());
 server.use(cors());
 
-server.use('/api', usersRouter, authRouter)
-// server.use('/api', authRouter)
+server.use('/api/users', usersRouter)
+server.use('/api/auth', authRouter)
+
+server.get('/', (req,res) =>{
+    res.json({api: "up"})
+})
 
 
-modules.exports = server;
+module.exports = server;

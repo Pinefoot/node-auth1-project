@@ -1,23 +1,24 @@
+
+
 const bcryptjs = require('bcryptjs')
 const router = require('express').Router()
-
 const Users = require('../users/users-model')
 const {isValid} = require('../users/users-service')
 
 router.post('/register', (req, res)=>{
     const credentials = req.body;
 
-    if(isValid(creditinals)){
+    if(isValid(credentials)){
         //need to figure out what rounds does again
         const rounds = process.env.BCRYPT_ROUNDS || 12;
-        const hash = bycryptjs.hashSync(credentials.password, rounds);
+        const hash = bcryptjs.hashSync(credentials.password, rounds);
         //this hashes the password
         credentials.password = hash;
 
         //saves the user to database
         Users.add(credentials)
             .then(user =>{
-                req.sessions.loggedIn === true;
+                req.session.loggedIn === true;
                 res.status(201).json({data: user})
             })
             .catch(err =>{
@@ -36,7 +37,7 @@ router.post('/login', (req, res)=>{
 
     if (isValid(req.body)){
         Users.findBy({username: username})
-        .then( user =>{
+        .then( ([user]) =>{
             if(user && bcryptjs.compareSync(password, user.password)){
                 req.session.loggedIn = true;
                 req.session.user = user;
@@ -68,8 +69,6 @@ router.get('/logout', (req, res)=>{
         res.status(204).end()
     }
 })
-
-
 
 
 
