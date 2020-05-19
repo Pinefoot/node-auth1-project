@@ -50,7 +50,7 @@ router.post('/login', (req, res)=>{
         })
     }else{
         res.status(400).json({
-            message: "Please provide user name ad password"
+            message: "Please provide username and password"
         })
     }
 })
